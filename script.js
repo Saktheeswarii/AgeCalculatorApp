@@ -1,33 +1,44 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const calculateButton = document.getElementById("calculateButton");
-    const result = document.getElementById("result");
+function calculateAge() {
+    let userInput = document.getElementById("date");
+    let result = document.getElementById("result");
 
-    calculateButton.addEventListener("click", function() {
-        const userInput = document.getElementById("date").value;
-        const age = calculateAge(userInput);
-        displayAge(age);
-    });
+    let birthDate = new Date(userInput.value);
+    let d1 = birthDate.getDate();
+    let m1 = birthDate.getMonth() + 1;
+    let y1 = birthDate.getFullYear();
 
-    function calculateAge(userInput) {
-        const birthDate = new Date(userInput);
-        const today = new Date();
+    let today = new Date();
+    let d2 = today.getDate();
+    let m2 = today.getMonth() + 1;
+    let y2 = today.getFullYear();
 
-        let years = today.getFullYear() - birthDate.getFullYear();
-        const months = today.getMonth() - birthDate.getMonth();
-        const days = today.getDate() - birthDate.getDate();
+    let d3, m3, y3;
+    y3 = y2 - y1;
 
-        if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
-            years--;
-        }
-
-        return { years, months, days };
+    if (m2 >= m1) {
+        m3 = m2 - m1;
+    } else {
+        y3--;
+        m3 = 12 + m2 - m1;
     }
 
-    function displayAge(age) {
-        result.innerHTML = `Your are <span>${age.years}</span> years, <span>${age.months}</span> months and <span>${age.days}</span> days old`;
-        
-        // Adjust font size dynamically based on the length of the result
-        const resultLength = result.innerText.length;
-        result.style.fontSize = `calc(30px - ${resultLength / 20}px)`;
+    if (d2 >= d1) {
+        d3 = d2 - d1;
+    } else {
+        m3--;
+        d3 = getDaysInMonth(y1, m1) + d2 - d1;
     }
-});
+
+    if (m3 < 0) {
+        m3 = 11;
+        y3--;
+    }
+
+    result.innerHTML = `Your are <span>${y3}</span> Years, <span>${m3}</span> Months and <span>${d3}</span> ays old`;
+
+    result.style.fontSize = "calc(10px + 2vw)";
+}
+
+function getDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate();
+}
