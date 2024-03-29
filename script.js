@@ -1,44 +1,53 @@
 function calculateAge() {
     let userInput = document.getElementById("date");
     let result = document.getElementById("result");
+    let nextBirthday = document.getElementById("next-birthday");
 
     let birthDate = new Date(userInput.value);
-    let d1 = birthDate.getDate();
-    let m1 = birthDate.getMonth() + 1;
-    let y1 = birthDate.getFullYear();
+    let daysLeft = daysUntilBirthday(birthDate);
 
+    // Calculate age
     let today = new Date();
-    let d2 = today.getDate();
-    let m2 = today.getMonth() + 1;
-    let y2 = today.getFullYear();
-
-    let d3, m3, y3;
-    y3 = y2 - y1;
-
-    if (m2 >= m1) {
-        m3 = m2 - m1;
-    } else {
-        y3--;
-        m3 = 12 + m2 - m1;
+    let age = today.getFullYear() - birthDate.getFullYear();
+    let m3 = today.getMonth() - birthDate.getMonth();
+    if (m3 < 0 || (m3 === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+        m3 += 12;
     }
-
-    if (d2 >= d1) {
-        d3 = d2 - d1;
-    } else {
+    let d3 = today.getDate() - birthDate.getDate();
+    if (d3 < 0) {
         m3--;
-        d3 = getDaysInMonth(y1, m1) + d2 - d1;
+        let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+        d3 = lastDayOfMonth - birthDate.getDate() + today.getDate();
     }
 
-    if (m3 < 0) {
-        m3 = 11;
-        y3--;
-    }
-
-    result.innerHTML = `Your are <span>${y3}</span> Years, <span>${m3}</span> Months and <span>${d3}</span> ays old`;
-
-    result.style.fontSize = "calc(10px + 2vw)";
+    // Display the results
+    result.innerHTML = `Your are <span>${age}</span> Years, <span>${m3}</span> Months and <span>${d3}</span> Days old`;
+    nextBirthday.innerHTML = `Days until your next birthday: <span>${daysLeft}</span> days`;
 }
-
-function getDaysInMonth(year, month) {
-    return new Date(year, month, 0).getDate();
+function daysUntilBirthday(birthday) {
+    // Get the current date
+    var currentDate = new Date();
+    
+    // Get the month and day of the birthday
+    var birthdayMonth = birthday.getMonth();
+    var birthdayDay = birthday.getDate();
+    
+    // Check if the birthday has passed this year or not
+    if (currentDate.getMonth() > birthdayMonth || (currentDate.getMonth() == birthdayMonth && currentDate.getDate() > birthdayDay)) {
+        var nextBirthdayYear = currentDate.getFullYear() + 1;
+    } else {
+        var nextBirthdayYear = currentDate.getFullYear();
+    }
+    
+    // Calculate the next birthday
+    var nextBirthday = new Date(nextBirthdayYear, birthdayMonth, birthdayDay);
+    
+    // Calculate the number of milliseconds until the next birthday
+    var timeDifference = nextBirthday.getTime() - currentDate.getTime();
+    
+    // Calculate the number of days until the next birthday
+    var daysUntilNextBirthday = Math.ceil(timeDifference / (1000 * 3600 * 24));
+    
+    return daysUntilNextBirthday;
 }
