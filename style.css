@@ -80,18 +80,3 @@
     font-weight: bolder;
     font-size: 30px;
 }
-
-@media only screen and (max-width: 768px) {
-    .calculator h1 {
-        font-size: 2rem;
-    }
-
-    .input-box input,
-    .input-box button {
-        flex-basis: 100%;
-    }
-
-    .input-box button {
-        margin-top: 10px;
-    }
-}
